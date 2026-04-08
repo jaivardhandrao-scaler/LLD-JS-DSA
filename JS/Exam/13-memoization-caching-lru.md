@@ -424,102 +424,11 @@ cache.get(4);   // 'd' (still here, moved to end)
 
 ---
 
-## Part D: JS Weird Parts (Bonus for Exam)
-
-### 13. Type Coercion Gotchas
-
-```js
-[] + []              // ""
-```
-- Both arrays are converted to strings via `.toString()`. `[].toString()` is `""`. `"" + ""` is `""`.
-
-```js
-[] + {}              // "[object Object]"
-```
-- `[].toString()` is `""`. `({}).toString()` is `"[object Object]"`. String concatenation.
-
-```js
-{} + []              // 0
-```
-- `{}` is parsed as an **empty block** (not an object). Then `+[]` is the **unary plus** operator on `[]`. `+[]` converts to `+""` converts to `0`.
-
-```js
-true + true          // 2
-```
-- `true` converts to `1`. `1 + 1 = 2`.
-
-```js
-"5" - 3              // 2
-```
-- The `-` operator only works on numbers. `"5"` is coerced to `5`. `5 - 3 = 2`.
-
-```js
-"5" + 3              // "53"
-```
-- The `+` operator prefers string concatenation when one operand is a string. `3` becomes `"3"`. Result: `"53"`.
-
-```js
-null == undefined    // true
-```
-- **Special rule**: `null` and `undefined` are `==` to each other and **nothing else**.
-
-```js
-null === undefined   // false
-```
-- Strict equality -- different types, so `false`.
-
-```js
-NaN === NaN          // false
-```
-- **NaN is not equal to anything, including itself.** Use `Number.isNaN(x)` to check.
-
-```js
-typeof null          // "object"
-```
-- **Historic bug** in JavaScript since 1995. Never fixed for backward compatibility.
-
-```js
-typeof NaN           // "number"
-```
-- `NaN` stands for "Not a Number" but its type IS `number`. It represents an invalid numeric result.
-
-```js
-0.1 + 0.2 === 0.3   // false
-```
-- IEEE 754 floating point. `0.1 + 0.2` is actually `0.30000000000000004`. Use `Math.abs(a - b) < Number.EPSILON` for float comparison.
-
-**More gotchas to know:**
-
-```js
-typeof []            // "object" (arrays are objects)
-typeof function(){}  // "function"
-"" == false          // true (both coerce to 0)
-"0" == false         // true ("0" -> 0, false -> 0)
-"" == "0"            // false (both strings, different values)
-[] == false          // true ([] -> "" -> 0, false -> 0)
-[] == ![]            // true (![] is false, then [] == false, see above)
-```
+> **Note:** JS Weird Parts (type coercion, hoisting, == vs ===, NaN/undefined/null) is covered in detail in **[14-js-weird-parts.md](14-js-weird-parts.md)**.
 
 ---
 
-### 14. Equality: == vs ===
-
-| Expression | `==` | `===` | Why |
-|-----------|------|-------|-----|
-| `1 == "1"` | `true` | `false` | `==` coerces string to number |
-| `0 == false` | `true` | `false` | `==` coerces boolean to number |
-| `0 == ""` | `true` | `false` | `==` coerces empty string to 0 |
-| `null == undefined` | `true` | `false` | Special `==` rule |
-| `null == 0` | `false` | `false` | `null` only `==` to `undefined` |
-| `NaN == NaN` | `false` | `false` | NaN is never equal to anything |
-| `[] == []` | `false` | `false` | Different references |
-| `"" == false` | `true` | `false` | Both coerce to 0 |
-
-**Rule of thumb**: Always use `===` unless you specifically need type coercion (e.g., `x == null` to check for both `null` and `undefined`).
-
----
-
-## Part E: Design Patterns
+## Part D: Design Patterns (Bonus)
 
 ### 15. Singleton Pattern
 
@@ -800,44 +709,6 @@ const cached = cache.getOrCompute("user:1", () => {
 
 ---
 
-### Problem 3: Predict the Output (Type Coercion + Closures)
-
-**Question**: What does each line log?
-
-```js
-console.log(typeof null);         // ?
-console.log(typeof undefined);    // ?
-console.log(null == undefined);   // ?
-console.log(null === undefined);  // ?
-console.log(NaN === NaN);         // ?
-console.log(typeof NaN);          // ?
-console.log([] + []);             // ?
-console.log([] + {});             // ?
-console.log("5" + 3);            // ?
-console.log("5" - 3);            // ?
-console.log(true + true + true); // ?
-console.log([] == ![]);          // ?
-console.log(0.1 + 0.2 === 0.3); // ?
-```
-
-**Answers:**
-
-```js
-console.log(typeof null);         // "object"        (historic bug)
-console.log(typeof undefined);    // "undefined"
-console.log(null == undefined);   // true            (special == rule)
-console.log(null === undefined);  // false           (different types)
-console.log(NaN === NaN);         // false           (NaN !== anything)
-console.log(typeof NaN);          // "number"        (NaN is type number)
-console.log([] + []);             // ""              (both toString -> "")
-console.log([] + {});             // "[object Object]"
-console.log("5" + 3);            // "53"            (+ prefers string concat)
-console.log("5" - 3);            // 2               (- forces number coercion)
-console.log(true + true + true); // 3               (true -> 1, 1+1+1)
-console.log([] == ![]);          // true            (![] is false, []==false -> 0==0)
-console.log(0.1 + 0.2 === 0.3); // false           (floating point)
-```
-
 ---
 
 ## Exam Tips
@@ -847,8 +718,8 @@ console.log(0.1 + 0.2 === 0.3); // false           (floating point)
 - **Map preserves insertion order.** `map.keys().next().value` gives you the FIRST (oldest) key. This is what makes O(1) LRU possible in JS.
 - **once() is a simplified memoize** -- it caches the first result and ignores all subsequent calls.
 - **JSON.stringify for cache keys** works for primitives and plain objects but fails for functions, `undefined`, and circular references.
-- **== vs ===**: If the exam asks about equality, remember `null == undefined` is `true`, `NaN === NaN` is `false`, and `typeof null` is `"object"`.
 - **Singleton**: Constructor returns existing instance. **Observer**: `on/off/emit` pattern. **Factory**: Function returns different objects based on input.
+- **JS Weird Parts** (type coercion, hoisting, == vs ===, NaN/null/undefined) are covered in **14-js-weird-parts.md**.
 - **Always use `fn.apply(this, args)`** in wrappers to preserve the `this` context.
 - **Time complexity of LRU**: O(1) for both get and put. Space is O(capacity). Know this cold.
 
@@ -865,9 +736,5 @@ console.log(0.1 + 0.2 === 0.3); // false           (floating point)
 | **Singleton** | One instance per class | Return existing instance from constructor | N/A |
 | **Observer** | Pub/sub event system | `events` object with arrays of listeners | O(1) emit per listener |
 | **Factory** | Create objects dynamically | Switch/map on type, return object | O(1) |
-| **== vs ===** | Loose vs strict equality | `===` checks type + value, `==` coerces | N/A |
-| **typeof null** | Returns `"object"` | Historic bug, never fixed | N/A |
-| **NaN === NaN** | Returns `false` | Use `Number.isNaN()` instead | N/A |
-| **0.1 + 0.2** | Not exactly 0.3 | IEEE 754 float, use epsilon comparison | N/A |
 | **Map vs Object** | Map: any key type, ordered | `map.keys().next().value` = first key | O(1) ops |
 | **JSON.stringify limits** | Fails on functions, undefined, circular | Use Map with reference keys when needed | N/A |

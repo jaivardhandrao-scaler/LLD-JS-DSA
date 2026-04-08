@@ -30,7 +30,65 @@ This entire topic is about understanding **why** that happens and **how** to pre
 
 ---
 
-## 1. How JavaScript Manages Memory
+## 1. Stack vs Heap
+
+JavaScript stores data in two memory regions:
+
+### Stack Memory
+
+- Stores **primitives** (`number`, `string`, `boolean`, `null`, `undefined`, `symbol`, `bigint`) and **function call frames**
+- **LIFO** (Last In, First Out) -- each function call pushes a frame; when it returns, the frame is popped
+- **Fixed size**, fast access (just move a pointer)
+- Values are copied when assigned to a new variable
+
+```js
+let a = 10;    // 10 is stored directly on the stack
+let b = a;     // a NEW copy of 10 is placed on the stack
+b = 20;
+console.log(a); // 10 -- independent, each has its own stack slot
+```
+
+### Heap Memory
+
+- Stores **objects**, **arrays**, **functions** -- anything that can grow or has dynamic size
+- **Dynamically allocated** -- no fixed size, slower than stack
+- Variables on the stack hold a **reference** (memory address) pointing to the heap location
+
+```js
+let obj1 = { x: 1 };  // { x: 1 } is on the heap; obj1 holds a reference on the stack
+let obj2 = obj1;       // obj2 gets a COPY of the reference (same heap address)
+obj2.x = 99;
+console.log(obj1.x);   // 99 -- both references point to the same heap object
+```
+
+### Visual Model
+
+```
+STACK                          HEAP
+┌──────────────┐
+│ a = 10       │
+│ b = 20       │
+│ obj1 = 0xA1 ─────────────> { x: 99 }    (address 0xA1)
+│ obj2 = 0xA1 ─────────────/
+│ arr  = 0xB2 ─────────────> [1, 2, 3]    (address 0xB2)
+└──────────────┘
+```
+
+### Why This Matters
+
+| | Stack | Heap |
+|---|---|---|
+| **Stores** | Primitives, function frames, references | Objects, arrays, functions |
+| **Speed** | Fast (pointer arithmetic) | Slower (dynamic allocation) |
+| **Size** | Small, fixed per frame | Large, dynamic |
+| **Cleanup** | Automatic when function returns (pop frame) | Garbage Collector must find and free |
+| **Assignment** | Copies the value | Copies the reference (shared data) |
+
+**Exam Tip:** When a function returns, its stack frame is popped and all local primitives are gone. But if an object was created on the heap and a reference to it still exists (e.g., returned from the function, stored in a closure, or in a global variable), the object survives on the heap. This is why closures can "remember" data after the outer function returns.
+
+---
+
+## 2. How JavaScript Manages Memory
 
 Every value you create occupies memory. JS handles memory in **three phases**:
 
@@ -60,7 +118,7 @@ student = null; // object is now unreachable -> eligible for GC
 
 ---
 
-## 2. Garbage Collection: Mark-and-Sweep
+## 3. Garbage Collection: Mark-and-Sweep
 
 ### The Algorithm JS Uses
 
@@ -116,7 +174,7 @@ objB = null;
 
 ---
 
-## 3. Common Memory Leaks (BAD vs GOOD)
+## 4. Common Memory Leaks (BAD vs GOOD)
 
 A **memory leak** occurs when memory that is no longer needed remains reachable, so GC cannot free it.
 
@@ -279,7 +337,7 @@ cleanup();
 
 ---
 
-## 4. WeakMap
+## 5. WeakMap
 
 A `WeakMap` holds **weak references** to its keys. If nothing else references a key, the key (and its associated value) can be garbage collected.
 
@@ -319,7 +377,7 @@ console.log(wm.size);     // undefined (not available)
 
 ---
 
-## 5. WeakSet
+## 6. WeakSet
 
 Same concept as `WeakMap`, but stores **values** instead of key-value pairs.
 
@@ -364,7 +422,7 @@ function processOrder(order) {
 
 ---
 
-## 6. WeakRef (Brief)
+## 7. WeakRef (Brief)
 
 `WeakRef` lets you hold a **weak reference** to a single object. The object can still be garbage collected.
 
@@ -386,7 +444,7 @@ console.log(ref.deref());       // undefined -- object was collected
 
 ---
 
-## 7. Map vs WeakMap Comparison
+## 8. Map vs WeakMap Comparison
 
 | Feature | Map | WeakMap |
 |---------|-----|---------|
@@ -417,7 +475,7 @@ obj2 = null;
 
 ---
 
-## 8. Practical Patterns
+## 9. Practical Patterns
 
 ### Pattern A: Private Data with WeakMap
 
@@ -632,6 +690,10 @@ function removeAllButtons() {
 
 | Concept | Key Point |
 |---------|-----------|
+| Stack memory | Stores primitives + function frames; fast, LIFO, auto-cleaned on return |
+| Heap memory | Stores objects/arrays/functions; dynamic size, cleaned by GC |
+| Stack assignment | Copies the value (independent) |
+| Heap assignment | Copies the reference (shared data) |
 | Memory lifecycle | Allocate -> Use -> Release (release is automatic via GC) |
 | Mark-and-sweep | Start from roots, mark reachable, sweep unreachable |
 | Roots | Global object, call stack, active closures |
