@@ -270,6 +270,38 @@ final class MissionPlanner {
 
 ---
 
+## More Factory Method Contexts (from PDF)
+
+Factory Method pops up in many domains. In each case, the pattern is the same: a **fixed algorithm** calls an **overridable factory method** that subclasses implement differently.
+
+**1. Maze Game Variants**
+- Base `MazeGame` has `createMaze()` algorithm that calls `makeRoom()`, `makeDoor()`.
+- `EnchantedMazeGame` overrides factory methods to return `EnchantedRoom`, `EnchantedDoor`.
+- `BombedMazeGame` returns `BombedRoom`, `BombedDoor`.
+- The maze-building algorithm stays fixed; parts are swapped per variant.
+
+**2. Projectile Spawners**
+- Base `ProjectileSpawner.fireBurst()` fixes the burst pipeline (timing, spread, audio).
+- Subclasses override `createProjectile()` to return `HomingMissile`, `Arrow`, or `PiercingBeam`.
+- Same burst logic, different projectiles.
+
+**3. Report Exporters**
+- Base `ReportExporter.export()` fixes validation/streaming/audit logic.
+- Subclasses override `createWriter()` to provide `CsvWriter`, `XlsxWriter`, or `JsonWriter`.
+- One export pipeline, multiple output formats.
+
+**4. Platform Dialogs**
+- Base `Dialog.render()` builds the UI layout.
+- Subclasses override `createButton()` to return `WindowsButton`, `MacButton`, or `LinuxButton`.
+- Same dialog structure, platform-specific widgets.
+
+**Extension ideas:**
+- **New manufacturer/variant:** Just add a new concrete creator with its own mapping -- existing code untouched (OCP).
+- **Richer requests:** Extend the factory method signature (e.g., `createJet(gen, role)` where role is air-superiority vs strike).
+- **Hybrid with Prototype:** A factory can internally clone a pre-configured prototype from a registry instead of calling `new`.
+
+---
+
 ## SOLID Connection
 
 | Principle | How Factory Method Relates |

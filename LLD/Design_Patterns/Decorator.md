@@ -399,6 +399,39 @@ System.out.println(build.describe() + " => HP " + hp + " -> " + build.applyTo(hp
 
 ---
 
+## Testing Strategy (from PDF)
+
+Test each decorator **in isolation** first, then verify **order-sensitive compositions** and overall contracts:
+
+```java
+// JUnit 5: test that RetryingHttpClient retries until success
+class RetryingHttpClientTest {
+    static class FlakyClient implements HttpClient {
+        int calls = 0;
+        @Override public HttpResponse send(HttpRequest req) {
+            calls++;
+            if (calls < 3) return new HttpResponse(503, Map.of(), null);
+            return new HttpResponse(200, Map.of(), null);
+        }
+    }
+
+    @Test void retries_until_success() {
+        FlakyClient flaky = new FlakyClient();
+        HttpClient client = new RetryingHttpClient(flaky, 5, 0);
+        HttpResponse r = client.send(new HttpRequest("GET", "u", Map.of(), null));
+        assertEquals(200, r.status);
+        assertEquals(3, flaky.calls);
+    }
+}
+```
+
+**Key testing advice:**
+- Test decorators with **mock/stub inner components** to isolate behavior
+- Test **ordering effects** (e.g., does cache go before or after retry?)
+- Include **micro-benchmarks** for per-layer latency if performance matters
+
+---
+
 ## When to Use / When NOT to Use
 
 **Use Decorator when:**

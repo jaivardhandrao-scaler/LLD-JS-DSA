@@ -283,6 +283,78 @@ class Demo {
 
 ---
 
+## Simpler Example: Employee Data Normalization (from PDF)
+
+A system needs to display employees from 3 different sources (CSV file, database, LDAP directory) in a unified format. Each source has a different data shape.
+
+```java
+// Target interface: what our system expects
+interface Employee {
+    String getId();
+    String getFirstName();
+    String getLastName();
+    String getEmail();
+}
+
+// Source A: CSV row (array of strings)
+class CsvRow {
+    String[] columns;  // [id, fullName, email]
+    CsvRow(String[] columns) { this.columns = columns; }
+}
+
+// Source B: DB result (different field names)
+class DbRecord {
+    String empId;
+    String fname;
+    String lname;
+    String emailAddr;
+    DbRecord(String empId, String fname, String lname, String emailAddr) {
+        this.empId = empId; this.fname = fname; this.lname = lname; this.emailAddr = emailAddr;
+    }
+}
+
+// Adapter A: CSV -> Employee
+class EmployeeCSVAdapter implements Employee {
+    private final CsvRow row;
+    EmployeeCSVAdapter(CsvRow row) { this.row = row; }
+
+    @Override public String getId() { return row.columns[0]; }
+    @Override public String getFirstName() {
+        return row.columns[1].split(" ")[0];  // "John Doe" -> "John"
+    }
+    @Override public String getLastName() {
+        String[] parts = row.columns[1].split(" ");
+        return parts.length > 1 ? parts[1] : "";
+    }
+    @Override public String getEmail() { return row.columns[2]; }
+}
+
+// Adapter B: DB -> Employee
+class EmployeeDBAdapter implements Employee {
+    private final DbRecord rec;
+    EmployeeDBAdapter(DbRecord rec) { this.rec = rec; }
+
+    @Override public String getId() { return rec.empId; }
+    @Override public String getFirstName() { return rec.fname; }
+    @Override public String getLastName() { return rec.lname; }
+    @Override public String getEmail() { return rec.emailAddr; }
+}
+
+// Client: works with Employee interface only
+class EmployeeDirectory {
+    public void printAll(List<Employee> employees) {
+        for (Employee e : employees) {
+            System.out.println(e.getId() + " | " + e.getFirstName()
+                + " " + e.getLastName() + " | " + e.getEmail());
+        }
+    }
+}
+```
+
+**Why this is useful for the exam:** It's a simpler, cleaner Adapter example than the Snapdeal/Exclusively one. If you get a coding question asking "normalize data from different sources using Adapter," this is the template.
+
+---
+
 ## How Adapter Honors SOLID
 
 | Principle | How Adapter Follows It |

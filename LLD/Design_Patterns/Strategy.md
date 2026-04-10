@@ -261,6 +261,164 @@ public final class PercentageFee implements FeeStrategy {
 
 **Key point:** Each strategy encapsulates ONE fee computation algorithm. The checkout service selects the right strategy based on country/plan and delegates.
 
+### Advanced Fee Strategies (from PDF)
+
+The PDF extends this example with **TieredFee** and **MixedFee** -- real-world patterns you'd see in payment platforms:
+
+**TieredFee** -- piecewise percentage schedule (like tax brackets):
+
+```java
+public final class TieredFee implements FeeStrategy {
+    public static final class Tier {
+        public final BigDecimal upToInclusive;  // e.g., 100.00
+        public final BigDecimal pct;             // e.g., 1.9 for 1.9%
+        public Tier(BigDecimal upToInclusive, BigDecimal pct) {
+            this.upToInclusive = upToInclusive; this.pct = pct;
+        }
+    }
+
+    private final List<Tier> tiers;
+    private final BigDecimal lastPct;  // overflow rate for amount beyond last tier
+
+    public TieredFee(List<Tier> tiers, BigDecimal lastPct) {
+        this.tiers = new ArrayList<>(tiers);
+        this.lastPct = lastPct;
+    }
+
+    @Override public Money fee(Money subtotal, CheckoutContext ctx) {
+        BigDecimal remaining = subtotal.amount();
+        BigDecimal acc = BigDecimal.ZERO;
+        BigDecimal prev = BigDecimal.ZERO;
+
+        for (Tier t : tiers) {
+            BigDecimal span = t.upToInclusive.subtract(prev);
+            BigDecimal take = remaining.min(span).max(BigDecimal.ZERO);
+            if (take.signum() > 0) {
+                acc = acc.add(take.multiply(t.pct.movePointLeft(2)));
+                remaining = remaining.subtract(take);
+            }
+            prev = t.upToInclusive;
+            if (remaining.signum() <= 0) break;
+        }
+        if (remaining.signum() > 0) {
+            acc = acc.add(remaining.multiply(lastPct.movePointLeft(2)));
+        }
+        return new Money(subtotal.currency(), acc);
+    }
+}
+```
+
+**MixedFee** -- maximum of a percentage fee and a fixed floor:
+
+```java
+public final class MixedFee implements FeeStrategy {
+    private final PercentageFee percentage;
+    private final FixedFee floor;
+
+    public MixedFee(PercentageFee percentage, FixedFee floor) {
+        this.percentage = percentage; this.floor = floor;
+    }
+
+    @Override public Money fee(Money subtotal, CheckoutContext ctx) {
+        Money a = percentage.fee(subtotal, ctx);
+        Money b = floor.fee(subtotal, ctx);
+        return a.max(b);  // whichever is higher
+    }
+}
+```
+
+**StrategyRegistry** -- maps (country, plan) to the right fee strategy at runtime:
+
+```java
+public final class StrategyRegistry {
+    private final Map<String, FeeStrategy> byKey = new ConcurrentHashMap<>();
+
+    private static String key(String country, String plan) {
+        return country + "::" + plan;
+    }
+
+    public void register(String country, String plan, FeeStrategy s) {
+        byKey.put(key(country, plan), Objects.requireNonNull(s));
+    }
+
+    public FeeStrategy resolve(CheckoutContext ctx, FeeStrategy fallback) {
+        return byKey.getOrDefault(key(ctx.country(), ctx.merchantPlan()), fallback);
+    }
+}
+
+// Usage:
+StrategyRegistry reg = new StrategyRegistry();
+reg.register("US", "BASIC", pct29);
+reg.register("US", "PRO",   mixed);
+// Engine resolves strategy based on checkout context
+```
+
+**Exam Tip:** The registry pattern + strategy = runtime-configurable behavior without `if/else` chains. This combo is very common in production systems and a strong exam/viva answer.
+
+---
+
+### Third Example: Game AI Steering (from PDF)
+
+NPCs in a game need different movement behaviors (Seek, Evade) that can be hot-swapped at runtime:
+
+```java
+public final class Vector2 {
+    public final double x, y;
+    public Vector2(double x, double y) { this.x = x; this.y = y; }
+    public Vector2 add(Vector2 o) { return new Vector2(x + o.x, y + o.y); }
+    public Vector2 sub(Vector2 o) { return new Vector2(x - o.x, y - o.y); }
+    public Vector2 scale(double s) { return new Vector2(x * s, y * s); }
+    public double length() { return Math.hypot(x, y); }
+    public Vector2 normalized() { double L = length(); return L == 0 ? this : scale(1.0/L); }
+}
+
+// Strategy interface
+public interface SteeringStrategy {
+    Vector2 steer(SteeringState s);
+    default String name() { return getClass().getSimpleName(); }
+}
+
+// Concrete strategy: move toward target
+public final class Seek implements SteeringStrategy {
+    @Override public Vector2 steer(SteeringState s) {
+        Vector2 dir = s.target.sub(s.position).normalized();
+        return dir.scale(s.maxAccel);
+    }
+}
+
+// Concrete strategy: move away from threat
+public final class Evade implements SteeringStrategy {
+    @Override public Vector2 steer(SteeringState s) {
+        Vector2 away = s.position.sub(s.threat).normalized();
+        return away.scale(s.maxAccel);
+    }
+}
+
+// Context: the NPC
+public final class Mover {
+    private Vector2 velocity = new Vector2(0, 0);
+    private SteeringStrategy strategy;
+
+    public Mover(SteeringStrategy initial) { this.strategy = initial; }
+    public void setStrategy(SteeringStrategy s) { this.strategy = s; }
+
+    public Vector2 update(SteeringState state, double dt) {
+        Vector2 accel = strategy.steer(state);
+        velocity = velocity.add(accel.scale(dt));
+        return state.position.add(velocity.scale(dt));
+    }
+}
+
+// Usage: NPC starts with Seek, switches to Evade when low health
+Mover npc = new Mover(new Seek());
+// ... later, health drops:
+npc.setStrategy(new Evade());  // hot-swap at runtime!
+```
+
+**Why this is Strategy:** The Mover has a FIXED update loop (`update()`), but the steering behavior is swappable. Adding `Wander`, `Patrol`, or `Flee` requires ZERO changes to `Mover`.
+
+**Strategy vs State distinction:** Strategy externalizes *which* algorithm to apply (chosen by configuration/context). State models an object's internal state machine where behavior changes *as it transitions*. You may change a Strategy arbitrarily; State transitions are constrained by the state model.
+
 ---
 
 ## Design Heuristics
