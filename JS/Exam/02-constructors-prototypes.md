@@ -710,3 +710,21 @@ true      // "in" walks the chain, finds it on Child.prototype
 | Factory vs Constructor | Factory: no `new`, no `instanceof`, no shared prototype; Constructor: `new`, `instanceof`, shared methods |
 | `Function.prototype` | `__proto__` of all functions; itself inherits from `Object.prototype` |
 | `Object.prototype.__proto__` | `null` -- end of every chain |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From Contest_Practice-1.md:**
+- Q5: Constructor function with prototype method
+- Q6: Implement `myNew` polyfill
+- Q7: Factory function vs Constructor
+- Q8: Prototype methods, avoid pollution
+
+**From practiceSheet.md:**
+- P20: Polyfill Object.create
+- P37: Implement `new` operator
+- P38: Manual prototypal inheritance
+- P39: Prototype lookup reasoning

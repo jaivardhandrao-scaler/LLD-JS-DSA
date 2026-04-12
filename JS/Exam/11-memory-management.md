@@ -709,3 +709,9 @@ function removeAllButtons() {
 | Map vs WeakMap | Map holds strong refs (prevents GC); WeakMap holds weak refs (allows GC) |
 | WeakMap use cases | Private class data, caching metadata, associating data with DOM nodes |
 | Forcing GC | You cannot; the engine decides when to run it |
+
+---
+
+## Practice These
+
+No direct practice questions for this module. Review closure-heavy problems from Module 2 to spot potential memory leak patterns.

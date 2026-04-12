@@ -580,3 +580,14 @@ Follow these steps mechanically. Do not guess.
 | **Starvation** | Microtasks adding microtasks forever --> macrotasks never run --> UI freezes |
 | **Blocking** | Long sync code blocks everything (event loop cannot check queues while stack is busy) |
 | **Prediction puzzle strategy** | Execute sync first, fill queues, drain microtasks, pick one macrotask, drain microtasks, repeat |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P4 (Event loop output prediction)
+- P5 (Implement async/await using generators)
+- P6 (Sequential async task queue)

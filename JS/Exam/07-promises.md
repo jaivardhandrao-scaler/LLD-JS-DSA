@@ -1009,3 +1009,18 @@ console.log("5");
 | **Forgetting `await`** | You get a Promise object (truthy!), not the value |
 | **Sequential vs parallel** | `await` one-by-one = sequential; `await Promise.all([...])` = parallel |
 | **Microtask queue** | `.then` callbacks and `await` resumptions run as microtasks, after sync code, before setTimeout |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P1: Promise pool -- concurrency limiter
+- P7: Manual promise chaining -- MyPromise
+- P8: Promise timeout wrapper
+- P11: Polyfill Promise.all
+- P12: Polyfill Promise.any
+- P13: Polyfill Promise.race
+- P14: Polyfill Promise.allSettled

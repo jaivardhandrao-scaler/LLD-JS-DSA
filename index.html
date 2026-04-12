@@ -305,7 +305,7 @@ const SUBJECTS = {
   js: {
     name: 'JavaScript',
     short: 'JS',
-    description: 'Core Concepts, Async Patterns, Closures, Prototypes, Exam Prep',
+    description: 'Functional Programming using JS — End Term April 2026',
     basePath: 'JS/',
     compilerUrl: 'https://onecompiler.com/javascript',
     compilerLabel: 'Open JS Console',
@@ -313,23 +313,35 @@ const SUBJECTS = {
     tag: 'JAVASCRIPT',
     tagClass: 'js',
     tree: [
-      { phase: "Core Notes", files: [ "notes.md" ]},
-      { phase: "Practice", files: [ "practiceSheet.md", "Contest_Practice-1.md" ]},
-      { phase: "Exam Prep", files: [
+      { phase: "Module 1: OOP in JavaScript", files: [
         "Exam/01-this-keyword.md",
         "Exam/02-constructors-prototypes.md",
         "Exam/03-classes-oop.md",
+      ]},
+      { phase: "Module 2: Function Mastery & Functional JS", files: [
         "Exam/04-call-apply-bind.md",
         "Exam/05-hof-array-polyfills.md",
         "Exam/06-closures-scope-currying.md",
+      ]},
+      { phase: "Module 3: Asynchronous JavaScript", files: [
         "Exam/07-promises.md",
         "Exam/08-event-loop.md",
         "Exam/09-async-patterns.md",
+      ]},
+      { phase: "Module 4: Performance & Optimization", files: [
         "Exam/10-debounce-throttle.md",
         "Exam/11-memory-management.md",
         "Exam/12-clone-equality-immutability.md",
         "Exam/13-memoization-caching-lru.md",
         "Exam/14-js-weird-parts.md",
+      ]},
+      { phase: "Coding Practice", files: [
+        "Contest_Practice-1.md",
+        "practiceSheet.md",
+      ]},
+      { phase: "Quick Reference & Study Order", files: [
+        "notes.md",
+        "STUDY_ORDER.md",
       ]},
     ]
   }

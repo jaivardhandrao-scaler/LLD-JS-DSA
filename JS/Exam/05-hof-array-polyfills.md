@@ -848,3 +848,21 @@ Result: 6
 | `myMap` | Every iteration | Callback's **return value** | New array |
 | `myFilter` | Only when callback is truthy | The **original element** | New array |
 | `myReduce` | N/A (updates accumulator) | N/A | Final accumulator |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From Contest_Practice-1.md:**
+- Q17: Polyfill Array.prototype.myMap
+- Q18: Polyfill Array.prototype.myFilter
+- Q19: Polyfill Array.prototype.myReduce
+- Q20: Chaining map/filter/reduce
+
+**From practiceSheet.md:**
+- P18: Polyfill Array.prototype.reduce
+- P19: Polyfill Array.prototype.filter
+- P49: Flatten nested array
+- P50: groupBy

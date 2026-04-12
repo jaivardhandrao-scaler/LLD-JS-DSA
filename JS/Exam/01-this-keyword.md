@@ -864,3 +864,18 @@ After any fix, `obj.count` would be `6`.
 **One final rule to carry into the exam:**
 
 Look at the **call site**. Ask: Is there `new`? Is there `call`/`apply`/`bind`? Is there a dot? If none, it is default binding. Apply the highest-priority rule that matches. If it is an arrow function, ignore all of the above -- `this` was decided when the arrow was created, not when it was called.
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From Contest_Practice-1.md:**
+- Q1: Fix `this` in nested function
+- Q2: Fix `this` with setTimeout
+- Q3: Lost `this` -- method called without object
+- Q4: Global vs function `this` in strict mode
+
+**From practiceSheet.md:**
+- P25: Fix var + setTimeout bug

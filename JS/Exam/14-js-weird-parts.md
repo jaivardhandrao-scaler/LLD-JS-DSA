@@ -956,3 +956,14 @@ ReferenceError: Cannot access 'x' before initialization
 | **`parseInt` vs `Number`** | parseInt stops at non-digit; Number requires whole string | `parseInt("123abc")` = 123, `Number("123abc")` = NaN |
 | **`[] + []`** | `""` | Both toString to "", string concat |
 | **`[] == ![]`** | `true` | Step through: ![] → false → 0, [] → "" → 0, 0 == 0 |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P25 (Fix var + setTimeout bug -- tests hoisting + closure understanding)
+
+**Note:** The prediction questions within this file are your best practice. Focus on getting them right without peeking.

@@ -738,3 +738,16 @@ const cached = cache.getOrCompute("user:1", () => {
 | **Factory** | Create objects dynamically | Switch/map on type, return object | O(1) |
 | **Map vs Object** | Map: any key type, ordered | `map.keys().next().value` = first key | O(1) ops |
 | **JSON.stringify limits** | Fails on functions, undefined, circular | Use Map with reference keys when needed | N/A |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From Contest_Practice-1.md:**
+- Q14 (Memoized add with closure cache)
+
+**From practiceSheet.md:**
+- P22 (memoize(fn) implementation)
+- P47 (LRU Cache with O(1) operations)

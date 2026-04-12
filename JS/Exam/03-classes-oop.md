@@ -735,3 +735,21 @@ Chain of calls:
 | Prototype-based OOP | No copying, delegation via chain | Thinking JS copies like Java |
 | Prototype mutation | Affects **all** existing instances | Thinking instances have their own copy |
 | `instanceof` | Checks prototype chain | Works across inheritance (`child instanceof Parent` = `true`) |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From Contest_Practice-1.md:**
+- Q9: ES6 class with private field + static counter
+- Q10: Inheritance with extends/super
+- Q11: Private method + public API
+- Q12: Class with getter + private field
+
+**From practiceSheet.md:**
+- P40: Class-based inheritance with mixins
+- P41: Method overriding + super simulation
+- P42: Singleton pattern
+- P43: Factory pattern

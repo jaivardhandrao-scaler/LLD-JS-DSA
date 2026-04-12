@@ -821,3 +821,19 @@ processItemsV2([1, 2, 3, 4, 5], unreliableProcess).then(console.log);
 | `Promise.allSettled(arr)` | All settle (fulfill or reject) | Never |
 | `Promise.race(arr)` | First settles (fulfill or reject) | First settles with rejection |
 | `Promise.any(arr)` | First fulfills | All reject (`AggregateError`) |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P1 (Promise pool -- concurrency limiter)
+- P2 (Retry with exponential backoff)
+- P3 (Promise.all with concurrency control)
+- P6 (Sequential async task queue)
+- P44 (Observer pattern)
+- P45 (EventEmitter)
+- P46 (Pub-Sub system)
+- P48 (Priority-based task scheduler)

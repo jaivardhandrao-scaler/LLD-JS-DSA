@@ -923,3 +923,24 @@ console.log(count2);
 ---
 
 *Good luck on the exam tomorrow.*
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From Contest_Practice-1.md:**
+- Q13: Closure counter
+- Q14: Memoized add with cache
+- Q15: Private bank account
+- Q16: Function factory -- multiplier
+
+**From practiceSheet.md:**
+- P21: once(fn)
+- P23: Private variables using closures
+- P24: Rate limiter using closure
+- P25: Fix var + setTimeout bug
+- P26: Implement currying
+- P27: Infinite currying sum
+- P28: Function logger wrapper

@@ -609,3 +609,14 @@ Even though `boundGetX` is called as `newModule.getX()` (which would normally se
 | **myBind** | Returns closure that calls `fn.apply(context, [...preset, ...later])` |
 | **Partial application** | `bind(ctx, arg1)` pre-fills arg1; rest supplied when calling |
 | **Second bind** | Has NO effect; first bind's `this` wins |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P15: Polyfill Function.prototype.call
+- P16: Polyfill Function.prototype.apply
+- P17: Polyfill Function.prototype.bind

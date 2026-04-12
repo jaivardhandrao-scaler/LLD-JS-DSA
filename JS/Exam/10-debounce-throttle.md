@@ -764,3 +764,13 @@ leadingFn("d"); // → "leading: d" (fires immediately again)
 | **`clearTimeout(undefined)` safe?** | Yes (no-op) | Yes (no-op) |
 | **`setTimeout(fn, 0)` behavior** | Still defers to next tick | Still defers to next tick |
 | **Production library** | `_.debounce` (Lodash) | `_.throttle` (Lodash) |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P9 (Debounced async function)
+- P10 (Throttled async function)

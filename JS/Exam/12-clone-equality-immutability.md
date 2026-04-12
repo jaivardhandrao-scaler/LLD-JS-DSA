@@ -697,3 +697,16 @@ console.log(config.db.host);  // "localhost" — deep frozen
 | **Flatten object** | Recurse with dot-prefix accumulation | Skip arrays and `null` in recursion check |
 | **Unflatten object** | Split key on `.`, walk/create path | Last segment gets the value, others get `{}` |
 | **Immutability (why)** | Predictable state, safe sharing, framework patterns | React requires new objects for re-renders |
+
+---
+
+## Practice These
+
+After studying this topic, solve these coding problems:
+
+**From practiceSheet.md:**
+- P29 (Deep clone with circular reference handling)
+- P30 (Deep equality check)
+- P31 (Flatten an object)
+- P32 (Unflatten an object)
+- P34 (Deep merge objects)
