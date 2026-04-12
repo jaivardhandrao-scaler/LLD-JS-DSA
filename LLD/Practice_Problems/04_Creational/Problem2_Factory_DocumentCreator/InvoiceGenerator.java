@@ -2,5 +2,7 @@ import java.util.Map;
 
 public class InvoiceGenerator extends DocumentGenerator {
 
-    // TODO: createDocument() - return new Invoice(fields)
+    public Invoice createDocument(Map<String , String> fields) {
+        return new Invoice(fields);
+    }
 }

@@ -1,7 +1,12 @@
 public class Main {
     public static void main(String[] args) {
-        // TODO: Get instance twice, prove they're the same with ==
-        // TODO: Read some config values using get() and getOrDefault()
-        // TODO: Print "Same instance? true"
+        
+        AppConfig instance1 = AppConfig.getInstance();
+        AppConfig instance2 = AppConfig.getInstance();
+        if(instance1 == instance2){
+            System.out.println("Same instances");
+        }else{
+            System.out.println("different instances");
+        }
     }
 }

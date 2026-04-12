@@ -2,8 +2,10 @@ import java.util.Map;
 
 public abstract class DocumentGenerator {
 
-    // TODO: final String generateAndSave(Map<String, String> fields)
-    //       Calls createDocument(), renders it, appends "Saved!" footer
+    final String generateAndSave(Map<String, String> fields){
+        Document doc = createDocument(fields);
+        return doc.render() + "\n --- Saved";
+    }
 
-    // TODO: abstract Document createDocument(Map<String, String> fields)
+    abstract Document createDocument(Map<String, String> fields);
 }

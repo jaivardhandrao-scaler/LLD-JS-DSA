@@ -4,9 +4,16 @@ public class Invoice implements Document {
 
     private Map<String, String> fields;
 
-    // TODO: Constructor(Map<String, String> fields)
+    Invoice(Map<String, String> fields){
+        this.fields = fields;
+    }
 
-    // TODO: type() - return "INVOICE"
+    public String type() {
+        return "invoice";
+    }
 
-    // TODO: render() - "INVOICE\n---\nItems: ... Total: ..."
+    public String render(){
+        return "INVOICE\n---\nItems: " + fields.getOrDefault("items", "N/A") +
+               "\nTotal: " + fields.getOrDefault("total", "N/A");
+    }
 }

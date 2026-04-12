@@ -4,9 +4,16 @@ public class Resume implements Document {
 
     private Map<String, String> fields;
 
-    // TODO: Constructor(Map<String, String> fields)
+    Resume(Map<String, String> fields){
+        this.fields = fields;
+    }
 
-    // TODO: type() - return "RESUME"
+    public String type() {
+        return "resume";
+    }
 
-    // TODO: render() - "RESUME\n---\nName: ... Skills: ..."
+    public String render(){
+        return "RESUME\n---\nName: " + fields.getOrDefault("name", "N/A") +
+               "\nSkills: " + fields.getOrDefault("skills", "N/A");
+    }
 }

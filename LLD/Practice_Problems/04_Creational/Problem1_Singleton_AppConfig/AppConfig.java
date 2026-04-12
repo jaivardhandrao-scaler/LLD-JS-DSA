@@ -1,18 +1,41 @@
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
-public class AppConfig {
+public class AppConfig{
 
-    private Map<String, String> properties;
+    private final Map<String , String> properties;
 
-    // TODO: Private constructor - initialize default properties
-    // {"app.name": "MyApp", "app.version": "1.0", "db.host": "localhost", "db.port": "5432"}
+    // private static volatile AppConfig INSTANCE;
 
-    // TODO: Static inner Holder class with private static final AppConfig INSTANCE
+    private AppConfig() {
+        this.properties = new HashMap<>();
+        this.properties.put("app.name" , "MyApp");
+        this.properties.put("app.version" , "1.0");
+        this.properties.put("db.host" , "localhost");
+        this.properties.put("db.port" , "5432");
+    }
 
-    // TODO: public static AppConfig getInstance() - return Holder.INSTANCE
+    public String get(String key){
+        return properties.get(key);
+    }
 
-    // TODO: public String get(String key) - return value or null
+    private static class Holder{
+        private static final AppConfig INSTANCE = new AppConfig();
+    }
 
-    // TODO: public String getOrDefault(String key, String defaultValue)
+    // static AppConfig getInstance(){
+    //     if(INSTANCE == null){
+    //         synchronized (AppConfig.class) {
+    //             if(INSTANCE == null){
+    //                 INSTANCE = new AppConfig();
+    //             }
+    //         }
+    //     }
+    //     return INSTANCE;
+    // }
+    static AppConfig getInstance(){
+        return Holder.INSTANCE;
+    }
+
+    
+
 }
